@@ -33,25 +33,31 @@ class GameController extends Controller
         return view('create');
     }
     public function save(Request $request){
+        request()->validate([
+            'title'=>'required|max:10|unique:games',
+            'game_description' => 'required|min:10|max:100',
+        ]);
         $game = new Game($request->all());
 //        $game->title = $request->title;
 //        $game->game_description = $request->game_description;
         $game->save();
         return redirect()->back();
     }
-    public function delete($id){
+    public function delete(Game $game){
 //        $game = Game::were('id', $id)->get();
-        $game  = Game::findOrfail($id);
+//        $game  = Game::findOrfail($id);
         $game->delete();
         return redirect()->back();
     }
-    public function  edit($gameid){
-        return view('edit')->with('gameId', $gameid);
+    public function  edit(Game $game){
+        return view('edit')->with('game', $game);
     }
-    public function update(Request $request, $gameId){
-        $game = Game::findOrfail($gameId);
-//        $game = $request->all();
+    public function update(Request $request, Game $game){
         $game->update($request->all());
+        return redirect()->back();
+//        $game = Game::findOrfail($gameId);
+//        $game = $request->all();
+//        $game->update($request->all());
 //        $game->update([
 //            'title'=>$request->title,
 //            'game_description'=>$request->game_description,
