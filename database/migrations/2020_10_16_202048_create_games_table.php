@@ -15,10 +15,15 @@ class CreateGamesTable extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('game_description');
             $table->integer('rating');
             $table->timestamps();
+            $table->foreign('user_id')->default('1')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

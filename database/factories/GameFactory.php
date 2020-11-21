@@ -25,6 +25,7 @@ class GameFactory extends Factory
             'title'=>$this->faker->sentence,
             'game_description'=>$this->faker->paragraph,
             'rating'=>$this->faker->randomDigit,
+            'user_id'=>self::factoryForModel(User::class)
         ];
     }
 }

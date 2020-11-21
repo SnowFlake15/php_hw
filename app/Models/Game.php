@@ -16,4 +16,7 @@ class Game extends Model
         "game_description",
         "rating"
     ];
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
