@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\game;
+use App\Notifications\DeleteNotification;
+use App\Notifications\PostApprovedNotification;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -47,7 +49,18 @@ class GameController extends Controller
 //        $game = Game::were('id', $id)->get();
 //        $game  = Game::findOrfail($id);
         $game->delete();
-        return redirect()->back();
+        $user = User::find(1);
+        $user->notify(new DeleteNotification());
+//        return redirect()->back();
+    }
+    public  function approve(Game $game)
+    {
+        $game->is_approved = true;
+        $game->$this->save();
+//        return redirect()->route('index');
+//        return response('OK', 200);
+    $user = User::find(1);
+    $user->notify(new PostApprovedNotification());
     }
     public function  edit(Game $game){
         return view('edit')->with('game', $game);

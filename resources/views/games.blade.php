@@ -73,9 +73,27 @@
                                     @method('DELETE')
                                     <button type="submit" class="fa fa-trash"></button>
                                 </form>
-
-
                         </div>
+                        <div class="ml-4 text-lg leading-7 font-semibold">
+                            <a type="submit" class="fa fa-trash btn-delete" url = "{{route('destroy', $game->id)}}"></a>
+                        </div>
+{{--                        @can('approve', $game)--}}
+                        <div class="ml-4 text-lg leading-7 font-semibold">
+{{--                            <form method="post" action="{{route('approve', $game->id)}}">--}}
+{{--                                @csrf--}}
+{{--                                @method('DELETE')--}}
+{{--                                <button type="submit" class="fa fa-thumbs-up"></button>--}}
+{{--                            </form>--}}
+                            @if($game->is_approved == true){
+                            <a type="submit" class="fa fa-check " disabled></a>
+                            @else
+
+                            <a type="submit" class="fa fa-ckeck btn-approve" url="{{route('approve', $game->id)}}"></a>
+                            @endif
+                        </div>
+{{--                        @endcan--}}
+
+
                     </div>
 
                     <div class="ml-12">
@@ -95,5 +113,50 @@
 
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$("meta[name='csrf-token']").attr(content)
+            }
+        });
+        $(document).on('click', '.btn-delete', function (e){
+            e.preventDefault();
+            $this = $(this);
+            $.ajax({
+                type:'DELETE',
+                url: $this.attr('url'),
+                success: function (){
+                    $this.closest('.game').remove()
+                }
+            })
+        })
+        $(document).on('click', '.btn-approve', function (e){
+            e.preventDefault();
+            $this = $(this);
+            $.ajax({
+                type:'GAME',
+                url: $this.attr('url'),
+                success: function (){
+                    $this.removeClass('fa-thumbs-up')
+                    $this.addClass('fa-check')
+                }
+            })
+        });
+        $(document).on('click', '.btn-delete', function (e){
+            e.preventDefault();
+            $this = $(this);
+            $.ajax({
+                type:'DELETE',
+                url: $this.attr('url'),
+                success: function (){
+                    $this.closest('.game').remove()
+                }
+            })
+        })
+    })
+
+</script>
+@endsection
 </body>
 </html>
